@@ -1,0 +1,161 @@
+*{
+  margin: 0;
+  padding: 0;
+  /* border: 1px solid #000; */
+}
+
+body{
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: rgba(20,20,30,1);
+}
+
+.main-section{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.bottom-line{
+  display: flex;
+  align-items: center;
+}
+
+.current-score{
+  border: 1px solid yellow;
+  background-color: rgba(20,20,30,1);
+  color: yellow;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.highscore{
+  border: 1px solid yellow;
+  background-color: rgba(20,20,30,1);
+  color: yellow;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 10px;
+}
+
+.reset{
+  background-color: rgba(20,20,30,1);
+  border: 0;
+  margin: 15px;
+  height: 100%;
+  color: yellow;
+  padding: 2px 5px;
+  width: 100px;
+  font-size: 24px;
+  border-radius: 10px;
+}
+
+svg{
+  height: 32px;
+  display: inline-block;
+}
+
+.gameover{
+  width: 100%;
+  color: azure;
+  font-size: 36px;
+  text-align: center;
+}
+
+
+
+.score{
+  color: aliceblue;
+  font-size: 20px;
+  width: 100px;
+  padding: 2px 5px;
+  margin: 15px;
+  text-align: center;
+}
+
+.board{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  border: 5px solid yellow;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.942);
+  border-radius: 4%;
+}
+
+.tile-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.tile{
+  height: 60px;
+  width: 60px;
+  border-radius: 5%;
+  margin: 2px;
+  color: #222;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  /* background-color: rgb(255, 255, 0); */
+}
+.tile>p{
+  font-size: 24px;
+  height: 36px;
+  font-weight: 500;
+}
+
+.buttons{
+  margin: 25px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.controls{
+  display: grid;
+  grid-template-columns: 40px 40px 40px;
+  grid-template-rows: 40px 40px 40px;
+}
+
+.up{
+  display: inline-block;
+  height: 40px;
+  border-radius: 50% 50% 25% 25%;
+  grid-column: 2/3;
+}
+.down{
+  display: inline-block;
+  grid-column: 2/3;
+  height: 40px;
+  border-radius:25% 25% 50% 50% ;
+
+}
+.left{
+  display: inline-block;
+  height: 40px;
+  border-radius:50% 25% 25% 50%   ;
+  grid-column: 1/2;
+}
+.right{
+  display: inline-block;
+  border-radius:25% 50% 50% 25%  ;
+  height: 40px;
+  grid-column: 3/-1;
+}
+.circle{
+  display: inline-block;
+  grid-column: 2/3;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
