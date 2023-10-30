@@ -1,7 +1,7 @@
-export default function HighScore({score}){
+export default function HighScore({highScore}){
     return (
     <div className='highscore'>
-      <p>HIGH SCORE : {localStorage.getItem("highscore") || 0}</p>
+      <p>HIGH SCORE : {highScore || 0}</p>
     </div>
     )
 }

@@ -1,5 +1,5 @@
-
-import { useState } from 'react';
+import React from 'react'
+import { useState, useEffect } from 'react';
 import './App.css';
 
 import cloneDeep from 'lodash/cloneDeep'
@@ -11,31 +11,37 @@ import Board from './Board';
 function App() {
 
   const [tiles, setTiles] = useState([[0,0,0,0],
+                                      [0,2,0,0],
                                       [0,0,0,0],
-                                      [0,0,2,0],
                                       [0,0,0,0]]);
   // const [play, setPlay] = useState(true);
   const [reload, setReload] = useState(true);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [highScore, setHighScore] = useState(
+    localStorage.getItem("highscore") || 0
+  );
+  
+  useEffect(() => {
+    const initialHighScore = parseInt(localStorage.getItem("highscore") || 0);
+    setHighScore(initialHighScore);
+  }, []);
+  
 
-  function reloadIt()
-  {
+  const reloadIt = React.useCallback(() => {
     setReload(!reload);
-    var currScore = score;
-    var highscore = localStorage.getItem("highscore");
-
-    if(highscore !== null){
-      if (currScore > highscore) {
-        localStorage.setItem("highscore", score);      
-      }
+  
+    if (score > highScore) {
+      localStorage.setItem("highscore", score); // Update high score in localStorage
+      setHighScore(score); // Update the high score state
     }
-    else{
-      localStorage.setItem("highscore", score);
-    }
-  }
+  }, [score, highScore, reload]);
+  
+  
+  
+  
 
-  function movesLeft()
+  const movesLeft = React.useCallback(()=>
   {
     let zeroes = 0;
     for(let i=0; i<4; i++)
@@ -72,14 +78,12 @@ function App() {
       }
     }
     return false;
-  }
+  }, [tiles]);
 
-  function addTile()
+  const addTile = React.useCallback(() =>
   {
-    // setPlay(true);
     let zeroes = 0;
-    // let newTiles = cloneDeep(tiles);
-    let newTiles = tiles;
+    let newTiles = cloneDeep(tiles);
     for(let i=0; i<4; i++)
     {
       for(let j=0; j<4; j++)
@@ -114,73 +118,26 @@ function App() {
       }
     }
 
-  }  
-
-  // function flipPlay()
-  // {
-  //   if(play)
-  //   {
-  //     addTile();
-  //     setPlay(true);
-  //   }
-  //   else
-  //   {
-  //     setPlay(true)
-  //   }
-  // }
-
+  }, [tiles] );
   function reset()
   {
-    setTiles([[0,0,0,0],
-      [0,2,0,0],
-      [0,0,0,0],
-      [0,0,0,0]]);
-      setGameOver(false);
-      setScore(0);
+    setTiles([
+      [0, 0, 0, 0],
+      [0, 2, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
+    ]);
+    setGameOver(false);
+    setScore(0);
   }
 
-  function pressedUp()
+  const move = React.useCallback((dir) => 
   {
-    move(0);
-  }
-  function pressedLeft()
-  {
-    move(1);
-  }
-  function pressedDown()
-  {
-    move(2);
-  }
-  function pressedRight()
-  {
-    move(3);
-  }
-
-  function move(dir)
-  {
-    // let newTiles = cloneDeep(tiles);
     let oldTiles = cloneDeep(tiles);
     let newTiles = tiles;
     let newScore = score;
-    // let oldTiles = tiles;
     if(dir === 0)
     {
-      // up
-      // for(let j =0; j<4; j++)
-      // {
-      //   let at = 0;
-      //   for(let i = 0; i<4; i++)
-      //   {
-      //     if(newTiles[i][j] !== 0)
-      //     {
-      //       let temp = newTiles[i][j];
-      //       newTiles[i][j] = 0;
-      //       newTiles[at++][j] = temp ;
-            
-      //     }
-      //   }
-      // }
-
       for(let j=0; j<4; j++)
       {
         let placeHere=0, atHere= 0;
@@ -198,7 +155,7 @@ function App() {
               newTiles[placeHere][j] *=2;
               newTiles[atHere][j] = 0;
               newScore += newTiles[placeHere][j];
-              console.log(newScore)
+              // console.log(newScore)
               atHere++;
               placeHere++;
             }
@@ -230,22 +187,6 @@ function App() {
     }
     else if(dir === 1)
     {
-      // left
-      // for(let i =0; i<4; i++)
-      // {
-      //   let at = 0;
-      //   for(let j = 0; j<4; j++)
-      //   {
-      //     if(newTiles[i][j] !== 0)
-      //     {
-      //       let temp = newTiles[i][j];
-      //       newTiles[i][j] = 0;
-      //       newTiles[i][at++] = temp ;
-            
-      //     }
-      //   }
-      // }
-
       for(let j=0; j<4; j++)
       {
         let placeHere = 0, atHere = 0;
@@ -293,22 +234,6 @@ function App() {
     }
     else if(dir === 2)
     {
-      // down
-      // for(let j =0; j<4; j++)
-      // {
-      //   let at = 3;
-      //   for(let i = 3; i>=0; i--)
-      //   {
-      //     if(newTiles[i][j] !== 0)
-      //     {
-      //       let temp = newTiles[i][j];
-      //       newTiles[i][j] = 0;
-      //       newTiles[at--][j] = temp ;
-            
-      //     }
-      //   }
-      // }
-
       for(let j=0; j<4; j++)
       {
         let placeHere=3, atHere= 3;
@@ -356,23 +281,6 @@ function App() {
     }
     else if(dir === 3)
     {
-      // right
-      // for(let i =0; i<4; i++)
-      // {
-      //   let at = 3;
-      //   for(let j = 3; j>=0; j--)
-      //   {
-      //     if(newTiles[i][j] !== 0)
-      //     {
-      //       let temp = newTiles[i][j];
-      //       newTiles[i][j] = 0;
-      //       newTiles[i][at--] = temp ;
-            
-      //     }
-      //   }
-      // }
-
-
       for(let j=0; j<4; j++)
       {
         let placeHere = 3, atHere = 3;
@@ -418,9 +326,6 @@ function App() {
         }
       }
     }
-    // console.log(oldTiles)
-    // console.log(newTiles)
-
     if(JSON.stringify(oldTiles) !== JSON.stringify(newTiles))
     {
       setTiles(newTiles);
@@ -429,15 +334,33 @@ function App() {
     if(!movesLeft())
     {
       setGameOver(true);
+      
     }
-    
     setScore(newScore);
     reloadIt();
-    // console.log(newTiles)
-    // console.log(tiles);
-  }
+  }, [addTile, movesLeft, reloadIt, score, tiles]);
 
-  document.addEventListener('keydown', function(e){
+  const pressedUp = React.useCallback(() => 
+  {
+    move(0);
+  },[move]);
+  const pressedLeft= React.useCallback(() => 
+  {
+    move(1);
+  },[move]);
+  const pressedDown= React.useCallback(() => 
+  {
+    move(2);
+  },[move]);
+  const pressedRight= React.useCallback(() => 
+  {
+    move(3);
+  },[move]);
+
+  
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
     if(e.key === 'w')
     {
       pressedUp();
@@ -470,7 +393,14 @@ function App() {
     {
       pressedDown();
     }
-  })
+  };
+  window.addEventListener('keydown', handleKeyDown);
+
+  // Clean up the event listener when the component unmounts
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, [pressedUp, pressedDown, pressedLeft, pressedRight]);
 
   return (
     <>
@@ -484,7 +414,7 @@ function App() {
       </div>
       <div className='bottom-line'>
         <Reset reset={reset}/>
-        <HighScore />
+        <HighScore highScore={highScore} />
       </div>
       <div className='controls'>
         <button className='up' onClick={pressedUp}> </button>
